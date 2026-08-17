@@ -18,17 +18,50 @@
         </div>
         <a href="#content-feed" class="cta-scroll-btn">See the Grit</a>
     </header>
+
     <main id="content-feed" class="feed-container">
         %STORIES_STREAM%
     </main>
+
     <footer class="global-footer">
         <div class="social-links-wrap">
-            <a href="%GITHUB%" target="_blank" class="social-icon-anchor">GitHub</a>
-            <a href="%FACEBOOK%" target="_blank" class="social-icon-anchor">Facebook</a>
-            <a href="%YOUTUBE%" target="_blank" class="social-icon-anchor">YouTube</a>
-            <a href="%WHATSAPP%" target="_blank" class="social-icon-anchor">WhatsApp</a>
-            <a href="%EMAIL%" class="social-icon-anchor">Email</a>
+            <!-- GitHub SVG Icon -->
+            <a href="%GITHUB%" target="_blank" class="social-icon-anchor" title="GitHub">
+                <svg class="social-svg" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.18-1.304.414-1.603-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </a>
+            <!-- Facebook SVG Icon -->
+            <a href="%FACEBOOK%" target="_blank" class="social-icon-anchor" title="Facebook">
+                <svg class="social-svg" viewBox="0 0 24 24"><path d="M22 12c0-5.523-4.477-10-10-10s-10 4.477-10 10c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54v-2.891h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562v1.87h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/></svg>
+            </a>
+            <!-- YouTube SVG Icon -->
+            <a href="%YOUTUBE%" target="_blank" class="social-icon-anchor" title="YouTube">
+                <svg class="social-svg" viewBox="0 0 24 24"><path d="M23.498 6.163c-.272-.98-1.04-1.755-2.008-2.03-1.77-.478-8.89-.478-8.89-.478s-7.12 0-8.89.478c-.966.275-1.733 1.05-2.008 2.03-.48 1.77-.48 5.476-.48 5.476s0 3.708.48 5.477c.275.966 1.042 1.733 2.008 2.008 1.77.48 8.89.48 8.89.48s7.12 0 8.89-.48c.966-.275 1.733-1.042 2.008-2.008.48-1.77.48-5.477.48-5.477s0-3.707-.48-5.476zM9.545 15.568V8.132l6.417 3.718-6.417 3.718z"/></svg>
+            </a>
+            <!-- WhatsApp SVG Icon -->
+            <a href="%WHATSAPP%" target="_blank" class="social-icon-anchor" title="WhatsApp">
+                <svg class="social-svg" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.064 12 .064c3.2 0 6.208 1.246 8.47 3.511C22.73 5.84 23.974 8.847 23.97 12c-.004 6.651-5.34 11.934-11.943 11.934-2.004 0-3.973-.504-5.718-1.463L0 24zm6.275-2.502c1.611.956 3.193 1.459 4.811 1.46 5.56 0 10.082-4.5 10.086-10.046.002-2.686-1.037-5.212-2.924-7.102C16.42 3.921 13.91 2.879 11.996 2.879c-5.565 0-10.087 4.502-10.09 10.048-.002 1.8.484 3.562 1.411 5.127l-.993 3.626 3.733-.976z"/></svg>
+            </a>
+            <!-- Email SVG Icon -->
+            <a href="%EMAIL%" class="social-icon-anchor" title="Email">
+                <svg class="social-svg" viewBox="0 0 24 24"><path d="M0 3v18h24v-18h-24zm21.518 2L12 12.19 2.482 5h19.036zm-19.518 14v-11.817l10 7.5 10-7.5v11.817h-20z"/></svg>
+            </a>
         </div>
     </footer>
+
+    <script>
+        // Interactive "See More" clamping controller handler
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('see-more-btn')) {
+                const body = e.target.previousElementSibling;
+                body.classList.toggle('expanded');
+                if (body.classList.contains('expanded')) {
+                    e.target.innerText = 'See Less';
+                } else {
+                    e.target.innerText = 'See More...';
+                    window.scrollTo({ top: body.parentElement.offsetTop - 20, behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
 </body>
 </html>
