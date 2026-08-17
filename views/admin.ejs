@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | The Smartphone Scientist</title>
+    <style>
+        :root { --bg: #090d12; --card: #121820; --accent: #00f3ff; --green: #39ff14; --border: #232d38; --text: #cbd5e1; }
+        body { background: var(--bg); color: var(--text); font-family: 'Courier New', monospace; padding: 15px; margin: 0; }
+        .wrapper { max-width: 800px; margin: 0 auto; padding: 15px; }
+        .panel { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 6px; margin-bottom: 20px; }
+        .grid-half { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media(min-width: 600px) { .grid-half { grid-template-columns: 1fr 1fr; } }
+        label { display: block; font-size: 0.85rem; color: var(--green); margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="url"], select { width: 100%; background: #090d12; border: 1px solid var(--border); color: #fff; padding: 8px; border-radius: 4px; font-family: inherit; margin-bottom: 12px; box-sizing: border-box; }
+        .editor-toolbar { background: #1a232d; border: 1px solid var(--border); border-bottom: none; padding: 6px; border-radius: 4px 4px 0 0; display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+        .editor-btn { background: #090d12; border: 1px solid var(--border); color: #fff; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 0.85rem; font-weight: bold; min-width: 32px; text-align: center; }
+        .editor-btn:hover { border-color: var(--accent); color: var(--accent); }
+        .editor-select { background: #090d12; color: #fff; border: 1px solid var(--border); font-size: 0.8rem; padding: 4px; border-radius: 3px; height: 28px; }
+        .editor-output-area { background: #090d12; border: 1px solid var(--border); min-height: 220px; padding: 12px; border-radius: 0 0 4px 4px; overflow-y: auto; color: #fff; font-family: 'Times New Roman', serif; font-size: 1.1rem; }
+        .btn-submit { background: transparent; border: 2px solid var(--green); color: var(--green); padding: 10px 20px; font-weight: bold; border-radius: 4px; cursor: pointer; font-family: inherit; }
+        .btn-submit:hover { background: var(--green); color: #000; box-shadow: 0 0 10px var(--green); }
+        .btn-danger { background: #ef4444; color: #fff; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-family: inherit; }
+        .btn-edit { background: var(--accent); color: #000; border: none; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-family: inherit; text-decoration: none; display: inline-block; }
+        .row-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding: 10px 0; }
+        .badge { font-size: 0.7rem; padding: 2px 6px; border-radius: 3px; font-weight: bold; }
+        .badge-live { background: rgba(57,255,20,0.15); color: var(--green); border: 1px solid var(--green); }
+        .badge-hidden { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid #ef4444; }
+        .preview-thumb { max-width: 120px; max-height: 120px; border: 1px solid var(--border); border-radius: 4px; display: none; margin-top: 8px; }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <header style="margin-bottom:20px; border-bottom:1px dashed var(--border); padding-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+                <h1 style="margin:0; font-size:1.4rem; color:var(--accent);">[ SMARTPHONE SCIENTIST LAB ]</h1>
+                <p style="margin:5px 0 0 0; font-size:0.8rem; color:var(--text);">Frictionless Workspace Console</p>
+            </div>
+            <a href="/" style="color:var(--green); text-decoration:none; font-size:0.85rem;">&lt;&lt; View Public Site</a>
+        </header>
+
+        <section class="panel">
+            <h2>⚙️ Dynamic System Configuration</h2>
+            <form action="/admin/settings/save" method="POST" style="margin-top:15px;">
+                <div class="grid-half">
+                    <div>
+                        <label>Facebook Profile Link</label>
+                        <input type="url" name="facebook" value="%FACEBOOK%" required>
+                        <label>YouTube Channel Link</label>
+                        <input type="url" name="youtube" value="%YOUTUBE%" required>
+                        <label>GitHub Repository Platform</label>
+                        <input type="url" name="github" value="%GITHUB%" required>
+                    </div>
+                    <div>
+                        <label>WhatsApp Link (wa.me/phone)</label>
+                        <input type="url" name="whatsapp" value="%WHATSAPP%" required>
+                        <label>Professional Email Anchor</label>
+                        <input type="text" name="email" value="%EMAIL%" required>
+                        <div style="text-align: right; margin-top: 15px;">
+                            <button type="submit" class="btn-submit" style="padding:7px 15px; font-size:0.85rem;">Update Footprint Config</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2 id="form-header">📝 Compile Scientist Log / Story</h2>
+            <form id="story-form" action="/admin/story/save" method="POST" style="margin-top:15px;">
+                <input type="hidden" name="id" id="story-id">
+                <input type="hidden" name="content" id="story-content-hidden">
+                <input type="hidden" name="image" id="story-image-hidden">
+
+                <div class="grid-half">
+                    <div>
+                        <label>Log Title</label>
+                        <input type="text" name="title" id="story-title" placeholder="e.g., Day 3: Rebuilding Workspace" required>
+                    </div>
+                    <div>
+                        <label>External Action URL (Optional)</label>
+                        <input type="url" name="externalLink" id="story-external" placeholder="https://github.com">
+                    </div>
+                </div>
+
+                <div class="grid-half" style="margin-bottom:12px;">
+                    <div>
+                        <label>Public Visibility Matrix</label>
+                        <select name="visible" id="story-visible">
+                            <option value="true">Visible (Publish Live)</option>
+                            <option value="false">Hidden (Local Draft)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Upload Media Frame</label>
+                        <input type="file" id="image-file-input" accept="image/*">
+                        <div><img id="image-preview" class="preview-thumb" alt="Preview"></div>
+                    </div>
+                </div>
+
+                <!-- UNIFIED HORIZONTAL ROW TOOLBAR: Keeps options on a single row line -->
+                <label>Story Content Body Layout (Times New Roman Style)</label>
+                <div class="editor-toolbar">
+                    <button type="button" class="editor-btn" onclick="executeCmd('bold')">B</button>
+                    <button type="button" class="editor-btn" onclick="executeCmd('italic')"><i>I</i></button>
+                    <button type="button" class="editor-btn" onclick="executeCmd('underline')"><u>U</u></button>
+                    <button type="button" class="editor-btn" onclick="executeCmd('justifyLeft')">⬅</button>
+                    <button type="button" class="editor-btn" onclick="executeCmd('justifyCenter')">🔀</button>
+                    
+                    <select class="editor-select" onchange="executeCmd('formatBlock', this.value); this.selectedIndex=0;">
+                        <option value="" selected disabled>H-Style</option>
+                        <option value="<h1>">H1 (Large)</option>
+                        <option value="<h2>">H2 (Medium)</option>
+                        <option value="<h3>">H3 (Small)</option>
+                        <option value="<p>">Paragraph</option>
+                    </select>
+
+                    <select class="editor-select" onchange="executeCmd('foreColor', this.value); this.selectedIndex=0;">
+                        <option value="" selected disabled>Colors</option>
+                        <option value="#ffffff">White</option>
+                        <option value="#39ff14">Green</option>
+                        <option value="#00f3ff">Cyan</option>
+                        <option value="#cbd5e1">Grey</option>
+                    </select>
+                </div>
+                <div id="editor-display-box" class="editor-output-area" contenteditable="true" placeholder="Type your text logs here..."></div>
+
+                <div style="margin-top:20px; display:flex; gap:10px;">
+                    <button type="submit" class="btn-submit">Publish Log to Array Database</button>
+                    <button type="button" id="btn-cancel-edit" class="btn-danger" style="display:none; background:#4b5563;" onclick="resetForm()">Cancel Edit Mode</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>📊 Active Record Control Board (%LOGS_COUNT% logs)</h2>
+            <div style="margin-top:15px;">
+                %STORIES_TABLE%
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function executeCmd(command, value = null) {
+            document.execCommand(command, false, value);
+            document.getElementById('editor-display-box').focus();
+        }
+
+        document.getElementById('story-form').addEventListener('submit', function(e) {
+            document.getElementById('story-content-hidden').value = document.getElementById('editor-display-box').innerHTML;
+        });
+
+        document.getElementById('image-file-input').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 700;
+                    let width = img.width, height = img.height;
+                    if (width > MAX_WIDTH) { height = Math.round((height * MAX_WIDTH) / width); width = MAX_WIDTH; }
+                    canvas.width = width; canvas.height = height;
+                    canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                    const base64Str = canvas.toDataURL('image/jpeg', 0.65);
+                    document.getElementById('story-image-hidden').value = base64Str;
+                    document.getElementById('image-preview').src = base64Str;
+                    document.getElementById('image-preview').style.display = 'block';
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function populateEditForm(id, title, content, extLink, isVisible) {
+            document.getElementById('form-header').innerText = "✏️ Refine Log Entry #" + id;
+            document.getElementById('story-id').value = id;
+            document.getElementById('story-title').value = decodeURIComponent(title);
+            document.getElementById('story-external').value = extLink;
+            document.getElementById('story-visible').value = isVisible;
+            document.getElementById('editor-display-box').innerHTML = decodeURIComponent(content);
+            document.getElementById('btn-cancel-edit').style.display = 'inline-block';
+            window.scrollTo({ top: document.getElementById('form-header').offsetTop, behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            document.getElementById('form-header').innerText = "📝 Compile Scientist Log / Story";
+            document.getElementById('story-id').value = '';
+            document.getElementById('story-form').reset();
+            document.getElementById('editor-display-box').innerHTML = '';
+            document.getElementById('story-image-hidden').value = '';
+            document.getElementById('image-preview').style.display = 'none';
+            document.getElementById('btn-cancel-edit').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
