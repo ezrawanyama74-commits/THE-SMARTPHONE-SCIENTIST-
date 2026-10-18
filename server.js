@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const ADMIN_ROUTE = process.env.ADMIN_ROUTE || '/scientist-portal';
 
-// Setup File Storage (Tracked in Git repository)
+// File Upload Storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadDir = path.join(__dirname, 'public', 'uploads');
@@ -36,15 +36,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Explicit SEO Routes
+// Dynamic SEO Sitemap Route
 app.get('/sitemap.xml', (req, res) => {
     res.header('Content-Type', 'application/xml');
-    res.sendFile(path.join(__dirname, 'public', 'sitemap.xml'));
+    const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://the-smartphone-scientist.onrender.com/</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`;
+    res.status(200).send(xmlContent);
 });
 
+// Robots.txt Route
 app.get('/robots.txt', (req, res) => {
     res.header('Content-Type', 'text/plain');
-    res.sendFile(path.join(__dirname, 'public', 'robots.txt'));
+    res.status(200).send(`User-agent: *\nAllow: /\nSitemap: https://the-smartphone-scientist.onrender.com/sitemap.xml`);
 });
 
 // Session configuration
@@ -118,7 +128,6 @@ app.get(ADMIN_ROUTE, requireAuth, (req, res) => {
     res.render('admin', { config: db.config, logs: db.logs, adminRoute: ADMIN_ROUTE });
 });
 
-// Update Footprint Config Route
 app.post(ADMIN_ROUTE + '/config', requireAuth, (req, res) => {
     const db = getDatabase();
     db.config = {
