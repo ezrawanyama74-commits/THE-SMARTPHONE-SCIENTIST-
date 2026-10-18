@@ -6,10 +6,4 @@
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-  <url>
-    <loc>https://the-smartphone-scientist.onrender.com/admin</loc>
-    <lastmod>2026-10-18</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
 </urlset>
