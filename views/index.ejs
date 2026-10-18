@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google-site-verification" content="KnK7fMRavFEkhzW_yI5F8W7LAt7twSg7p9Aj5OWXHwc" />
+    
+    <title>Ezra Wanyama | The Smartphone Scientist</title>
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="Ezra Wanyama">
+    <meta name="description" content="Official distribution hub & scientist logs by Ezra Wanyama. Access terminal tools, PDF resources, HTML apps, and mobile engineering blueprints.">
+    
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Ezra Wanyama | The Smartphone Scientist">
+    <meta property="og:description" content="Building line-by-line in Termux: Hardware is no longer a barrier when you possess knowledge.">
+    <meta property="og:image" content="/images/profile.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <header class="hero-header">
+        <div class="avatar-container">
+            <img src="/images/profile.jpg" alt="Ezra Wanyama" class="avatar-img" onerror="this.src='https://ui-avatars.com/api/?name=Ezra+Wanyama&background=0D8ABC&color=fff'">
+        </div>
+        
+        <h1 class="author-name">Ezra Wanyama</h1>
+        <div class="scientist-badge">
+            <i class="fa-solid fa-microchip"></i> THE SMARTPHONE SCIENTIST
+        </div>
+
+        <div class="quote-box">
+            <p>"They told me a smartphone was just for consuming content. I proved it's a supercomputer for creating it. Built line-by-line in a mobile terminal, this platform is proof that when you possess knowledge, hardware is no longer a barrier."</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <% if (logs && logs.length > 0) { %>
+            <% logs.forEach(log => { %>
+                <article class="log-card">
+                    <div class="log-header">
+                        <span class="log-date">[ <%= log.date %> ]</span>
+                        <span class="log-category"><%= log.category %></span>
+                    </div>
+                    
+                    <h2 class="log-title"><%= log.title %></h2>
+                    <div class="log-body"><%= log.content %></div>
+
+                    <% if (log.files && log.files.length > 0) { %>
+                        <div class="attachments-wrapper">
+                            <div class="attachment-title">
+                                <i class="fa-solid fa-folder-open"></i> Hosted Files & Resources (<%= log.files.length %>)
+                            </div>
+                            <% log.files.forEach(file => { %>
+                                <a href="<%= file.path %>" download="<%= file.originalName %>" class="file-pill">
+                                    <div class="file-info">
+                                        <% if (file.originalName.endsWith('.pdf')) { %>
+                                            <i class="fa-solid fa-file-pdf" style="color: #ff4757;"></i>
+                                        <% } else if (file.originalName.endsWith('.html') || file.originalName.endsWith('.htm')) { %>
+                                            <i class="fa-solid fa-code" style="color: #00ff9d;"></i>
+                                        <% } else { %>
+                                            <i class="fa-solid fa-file-lines" style="color: #00f0ff;"></i>
+                                        <% } %>
+                                        <span><%= file.originalName %> (<%= file.size %>)</span>
+                                    </div>
+                                    <span class="btn-download"><i class="fa-solid fa-download"></i> Download</span>
+                                </a>
+                            <% }) %>
+                        </div>
+                    <% } %>
+
+                    <% if (log.externalUrl) { %>
+                        <div style="margin-top: 15px;">
+                            <a href="<%= log.externalUrl %>" target="_blank" style="color: var(--accent-cyan); font-family: var(--font-code); font-size: 0.85rem; text-decoration: none;">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Open Action Link
+                            </a>
+                        </div>
+                    <% } %>
+                </article>
+            <% }) %>
+        <% } else { %>
+            <div class="log-card" style="text-align: center; padding: 40px;">
+                <p style="font-family: var(--font-code); color: var(--accent-green);">[ SCIENCE LOG DATABASE INITIALIZED ]</p>
+                <p style="color: var(--text-muted); margin-top: 8px;">No active entries published yet.</p>
+            </div>
+        <% } %>
+    </main>
+
+    <footer class="footer-socials">
+        <a href="<%= config.github %>" target="_blank" class="social-link" title="GitHub"><i class="fa-brands fa-github"></i></a>
+        <a href="<%= config.youtube %>" target="_blank" class="social-link" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+        <a href="<%= config.facebook %>" target="_blank" class="social-link" title="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        <a href="<%= config.whatsapp %>" target="_blank" class="social-link" title="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        <a href="mailto:<%= config.email %>" class="social-link" title="Email"><i class="fa-solid fa-envelope"></i></a>
+    </footer>
+
+</body>
+</html>

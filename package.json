@@ -1,0 +1,16 @@
+{
+  "name": "smartphone-scientist",
+  "version": "2.0.0",
+  "description": "The Smartphone Scientist Platform - Mobile First Engineering & File Distribution Hub",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.8",
+    "ejs": "^3.1.9",
+    "express": "^4.18.2",
+    "express-session": "^1.19.0",
+    "multer": "^1.4.5-lts.1"
+  }
+}

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Allow: /uploads/
+
+Sitemap: https://the-smartphone-scientist.onrender.com/sitemap.xml

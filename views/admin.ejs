@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Studio | Smartphone Scientist</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <main class="main-content" style="margin-top: 30px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+            <h1 style="font-family: var(--font-code); color: var(--accent-green); font-size: 1.3rem;">
+                <i class="fa-solid fa-terminal"></i> [ SCIENTIST CONTROL PORTAL ]
+            </h1>
+            <div>
+                <a href="/" style="color: var(--accent-cyan); text-decoration: none; font-family: var(--font-code); font-size: 0.85rem; margin-right: 15px;" target="_blank">
+                    &lt;&lt; Public Hub
+                </a>
+                <a href="/logout" style="color: var(--danger-red); text-decoration: none; font-family: var(--font-code); font-size: 0.85rem;">
+                    Logout
+                </a>
+            </div>
+        </div>
+
+        <!-- Dynamic Social Footprint Configuration Card -->
+        <div class="form-card" style="border-color: var(--accent-cyan);">
+            <h2 style="font-size: 1.1rem; color: #fff; margin-bottom: 20px; font-family: var(--font-code);">
+                <i class="fa-solid fa-address-book" style="color: var(--accent-cyan);"></i> Dynamic Footprint & Social Links Config
+            </h2>
+
+            <form action="<%= adminRoute %>/config" method="POST">
+                <div class="form-group">
+                    <label><i class="fa-brands fa-github"></i> GitHub Profile / Repo Link</label>
+                    <input type="url" name="github" class="form-input" value="<%= config.github %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fa-brands fa-youtube"></i> YouTube Channel Link</label>
+                    <input type="url" name="youtube" class="form-input" value="<%= config.youtube %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fa-brands fa-facebook"></i> Facebook Profile Link</label>
+                    <input type="url" name="facebook" class="form-input" value="<%= config.facebook %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fa-brands fa-whatsapp"></i> WhatsApp Contact / Group Link</label>
+                    <input type="text" name="whatsapp" class="form-input" value="<%= config.whatsapp %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label><i class="fa-solid fa-envelope"></i> Professional Email Anchor</label>
+                    <input type="text" name="email" class="form-input" value="<%= config.email %>" required>
+                </div>
+
+                <button type="submit" class="btn-submit" style="background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));">
+                    <i class="fa-solid fa-floppy-disk"></i> Update Social Footprint Config
+                </button>
+            </form>
+        </div>
+
+        <!-- Create Log Form with Multi-File Upload -->
+        <div class="form-card">
+            <h2 style="font-size: 1.1rem; color: #fff; margin-bottom: 20px; font-family: var(--font-code);">
+                <i class="fa-solid fa-file-circle-plus"></i> Compile Scientist Log & Host Files
+            </h2>
+
+            <form action="<%= adminRoute %>/logs" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Log Title</label>
+                    <input type="text" name="title" class="form-input" placeholder="e.g., UNIV 1001 Final Assessment Practice Bundle" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Category / Tag</label>
+                    <input type="text" name="category" class="form-input" placeholder="e.g., HTML TOOL, PDF GUIDE, SYSTEM BLUEPRINT">
+                </div>
+
+                <div class="form-group">
+                    <label>Attach Files (PDF, HTML, Zip, Images)</label>
+                    <input type="file" name="attachments" class="form-input" multiple>
+                    <small style="color: var(--text-muted); font-size: 0.75rem;">You can select multiple files at once.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>External Action Link (Optional)</label>
+                    <input type="url" name="externalUrl" class="form-input" placeholder="https://github.com/...">
+                </div>
+
+                <div class="form-group">
+                    <label>Log Content / Description</label>
+                    <textarea name="content" class="form-textarea" rows="6" placeholder="Write details about the update or instructions for downloaded files..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Publish Entry to Hub
+                </button>
+            </form>
+        </div>
+
+        <!-- Active Records Board -->
+        <div class="form-card">
+            <h2 style="font-size: 1.1rem; color: #fff; margin-bottom: 20px; font-family: var(--font-code);">
+                <i class="fa-solid fa-list-check"></i> Active Logs Database (<%= logs.length %>)
+            </h2>
+
+            <% if (logs && logs.length > 0) { %>
+                <% logs.forEach(log => { %>
+                    <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.4); padding: 12px 16px; border-radius: 8px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div>
+                            <span style="font-family: var(--font-code); color: var(--accent-green); font-size: 0.8rem;">[ <%= log.date %> ]</span>
+                            <strong style="color: #fff; margin-left: 8px;"><%= log.title %></strong>
+                            <span style="color: var(--text-muted); font-size: 0.8rem; margin-left: 8px;">(<%= log.files ? log.files.length : 0 %> files)</span>
+                        </div>
+                        <form action="<%= adminRoute %>/logs/delete/<%= log.id %>" method="POST" style="margin: 0;">
+                            <button type="submit" style="background: var(--danger-red); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-family: var(--font-code); font-size: 0.75rem;">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p style="color: var(--text-muted); font-size: 0.9rem; font-family: var(--font-code);">No active log entries found.</p>
+            <% } %>
+        </div>
+    </main>
+
+</body>
+</html>
