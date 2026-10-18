@@ -9,7 +9,35 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const ADMIN_ROUTE = process.env.ADMIN_ROUTE || '/scientist-portal';
 
-// File Upload Storage
+// ==========================================
+// 1. CRITICAL SEO ROUTES (TOP PRIORITY)
+// ==========================================
+app.get('/robots.txt', (req, res) => {
+    console.log('[SEO CRAWLER] Googlebot requested robots.txt');
+    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    return res.status(200).send("User-agent: *\nAllow: /\n\nSitemap: https://the-smartphone-scientist.onrender.com/sitemap.xml");
+});
+
+app.get('/sitemap.xml', (req, res) => {
+    console.log('[SEO CRAWLER] Googlebot requested sitemap.xml');
+    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://the-smartphone-scientist.onrender.com/</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+</urlset>`;
+    return res.status(200).send(xml);
+});
+
+// ==========================================
+// 2. STORAGE & MIDDLEWARE
+// ==========================================
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadDir = path.join(__dirname, 'public', 'uploads');
@@ -27,34 +55,11 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-// 1. EXPLICIT SEO ROUTES (MUST BE BEFORE express.static)
-app.get('/robots.txt', (req, res) => {
-    res.type('text/plain');
-    res.send(`User-agent: *\nAllow: /\n\nSitemap: https://the-smartphone-scientist.onrender.com/sitemap.xml`);
-});
-
-app.get('/sitemap.xml', (req, res) => {
-    res.type('application/xml');
-    res.send(`<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://the-smartphone-scientist.onrender.com/</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-</urlset>`);
-});
-
-// Serve Static Files
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Session configuration
@@ -98,7 +103,9 @@ function saveDatabase(data) {
     fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 }
 
-// Public Routes
+// ==========================================
+// 3. APPLICATION ROUTES
+// ==========================================
 app.get('/', (req, res) => {
     const db = getDatabase();
     res.render('index', { config: db.config, logs: db.logs });
@@ -122,7 +129,7 @@ app.get('/logout', (req, res) => {
     res.redirect('/');
 });
 
-// Secret Admin Routes
+// Admin Portal Routes
 app.get(ADMIN_ROUTE, requireAuth, (req, res) => {
     const db = getDatabase();
     res.render('admin', { config: db.config, logs: db.logs, adminRoute: ADMIN_ROUTE });
