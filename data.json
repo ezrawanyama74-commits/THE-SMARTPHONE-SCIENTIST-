@@ -1,0 +1,29 @@
+{
+  "config": {
+    "facebook": "https://facebook.com",
+    "youtube": "https://youtube.com/@Ezra_Wanyama",
+    "github": "https://github.com/ezrawanyama74-commits",
+    "whatsapp": "https://wa.me/0748907929",
+    "email": "scientist@domain.com"
+  },
+  "logs": [
+    {
+      "id": "1792310871923",
+      "title": "Testing ",
+      "category": "Testing ",
+      "date": "10/18/2026",
+      "content": "Testing ",
+      "externalUrl": "",
+      "visibility": "LIVE",
+      "files": [
+        {
+          "originalName": "presentation (1).html",
+          "filename": "1792310871859-755565834-presentation_(1).html",
+          "path": "/uploads/1792310871859-755565834-presentation_(1).html",
+          "mimetype": "text/html",
+          "size": "0.01 MB"
+        }
+      ]
+    }
+  ]
+}

@@ -9,7 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const ADMIN_ROUTE = process.env.ADMIN_ROUTE || '/scientist-portal';
 
-// Setup File Storage
+// Setup File Storage (Tracked in Git repository)
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         const uploadDir = path.join(__dirname, 'public', 'uploads');
@@ -35,6 +35,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Explicit SEO Routes
+app.get('/sitemap.xml', (req, res) => {
+    res.header('Content-Type', 'application/xml');
+    res.sendFile(path.join(__dirname, 'public', 'sitemap.xml'));
+});
+
+app.get('/robots.txt', (req, res) => {
+    res.header('Content-Type', 'text/plain');
+    res.sendFile(path.join(__dirname, 'public', 'robots.txt'));
+});
 
 // Session configuration
 app.use(session({
@@ -62,7 +73,7 @@ function getDatabase() {
                 facebook: "https://facebook.com",
                 youtube: "https://youtube.com/@Ezra_Wanyama",
                 github: "https://github.com/ezrawanyama74-commits",
-                whatsapp: "https://wa.me/phone",
+                whatsapp: "https://wa.me/0748907929",
                 email: "scientist@domain.com"
             },
             logs: []
@@ -107,7 +118,7 @@ app.get(ADMIN_ROUTE, requireAuth, (req, res) => {
     res.render('admin', { config: db.config, logs: db.logs, adminRoute: ADMIN_ROUTE });
 });
 
-// Update Footprint Config Route (Matches Admin Route Prefix)
+// Update Footprint Config Route
 app.post(ADMIN_ROUTE + '/config', requireAuth, (req, res) => {
     const db = getDatabase();
     db.config = {
