@@ -34,12 +34,16 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
 
-// Dynamic SEO Sitemap Route
+// 1. EXPLICIT SEO ROUTES (MUST BE BEFORE express.static)
+app.get('/robots.txt', (req, res) => {
+    res.type('text/plain');
+    res.send(`User-agent: *\nAllow: /\n\nSitemap: https://the-smartphone-scientist.onrender.com/sitemap.xml`);
+});
+
 app.get('/sitemap.xml', (req, res) => {
-    res.header('Content-Type', 'application/xml');
-    const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+    res.type('application/xml');
+    res.send(`<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://the-smartphone-scientist.onrender.com/</loc>
@@ -47,15 +51,11 @@ app.get('/sitemap.xml', (req, res) => {
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-</urlset>`;
-    res.status(200).send(xmlContent);
+</urlset>`);
 });
 
-// Robots.txt Route
-app.get('/robots.txt', (req, res) => {
-    res.header('Content-Type', 'text/plain');
-    res.status(200).send(`User-agent: *\nAllow: /\nSitemap: https://the-smartphone-scientist.onrender.com/sitemap.xml`);
-});
+// Serve Static Files
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Session configuration
 app.use(session({
