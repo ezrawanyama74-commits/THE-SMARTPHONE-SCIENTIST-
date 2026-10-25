@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects Dashboard - The Smartphone Scientist</title>
+    
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Times New Roman", Times, serif;
+            font-size: 12pt;
+            background-color: #030712;
+            color: #f3f4f6;
+            min-height: 100vh;
+            padding: 40px 16px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(34, 211, 238, 0.12) 0%, transparent 40%);
+        }
+
+        .header-container {
+            max-width: 1000px;
+            margin: 0 auto 40px auto;
+            text-align: center;
+        }
+
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 16px;
+            color: #22d3ee;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.2s ease;
+        }
+
+        .nav-back:hover {
+            color: #ffffff;
+        }
+
+        h1 {
+            font-size: 22pt;
+            color: #22d3ee;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 14px rgba(6, 182, 212, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            font-style: italic;
+            font-size: 12pt;
+        }
+
+        .projects-grid {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .projects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .project-card {
+            background: rgba(3, 7, 18, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(6, 182, 212, 0.35);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .project-card:hover {
+            border-color: #22d3ee;
+            box-shadow: 0 0 28px rgba(6, 182, 212, 0.5);
+            transform: translateY(-4px);
+        }
+
+        .project-title {
+            font-size: 16pt;
+            color: #ffffff;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .project-title i {
+            color: #06b6d4;
+        }
+
+        .info-group {
+            margin-bottom: 12px;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #22d3ee;
+            font-size: 11pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .info-content {
+            color: #cbd5e1;
+            font-size: 12pt;
+            line-height: 1.5;
+        }
+
+        .tech-badge {
+            display: inline-block;
+            background: rgba(6, 182, 212, 0.15);
+            color: #67e8f9;
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10.5pt;
+            margin-right: 4px;
+            margin-top: 4px;
+        }
+
+        .project-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 18px;
+            padding: 10px 20px;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 11.5pt;
+            font-weight: bold;
+            color: #030712;
+            background: linear-gradient(135deg, #06b6d4, #22d3ee);
+            border: none;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+        }
+
+        .project-link:hover {
+            background: linear-gradient(135deg, #22d3ee, #67e8f9);
+            box-shadow: 0 0 22px rgba(34, 211, 238, 0.8);
+        }
+
+        .loading-text {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: #94a3b8;
+            font-style: italic;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <a href="index.html" class="nav-back">← Back to Bio</a>
+        <h1>MY PROJECTS</h1>
+        <div class="subtitle">Built via 100% Zero-Debt Mobile Smartphone Engineering</div>
+    </div>
+
+    <!-- Dynamic Projects Container -->
+    <div class="projects-grid" id="projects-container">
+        <div class="loading-text">Loading projects from database...</div>
+    </div>
+
+    <script>
+        // Dynamic project loader ready for backend / admin panel integration
+        async function loadProjects() {
+            try {
+                const response = await fetch('/data.json'); // or your API endpoint
+                const data = await response.json();
+                const container = document.getElementById('projects-container');
+                
+                if (!data.projects || data.projects.length === 0) {
+                    container.innerHTML = '<div class="loading-text">No projects available yet. Add some via the admin panel!</div>';
+                    return;
+                }
+
+                container.innerHTML = '';
+                data.projects.forEach(project => {
+                    const techBadges = project.devicesAndApps.map(app => `<span class="tech-badge">${app}</span>`).join('');
+                    
+                    const card = document.createElement('div');
+                    card.className = 'project-card';
+                    card.innerHTML = `
+                        <div>
+                            <div class="project-title">
+                                <i class="${project.icon || 'fas fa-code'}"></i> ${project.name}
+                            </div>
+                            <div class="info-group">
+                                <span class="info-label">Device & Apps Used:</span>
+                                <div>${techBadges}</div>
+                            </div>
+                            <div class="info-group">
+                                <span class="info-label">Why it was coded:</span>
+                                <p class="info-content">${project.why}</p>
+                            </div>
+                            <div class="info-group">
+                                <span class="info-label">What it has solved:</span>
+                                <p class="info-content">${project.solved}</p>
+                            </div>
+                        </div>
+                        <a href="${project.link}" target="_blank" class="project-link">
+                            View Live Project <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Error loading projects:', error);
+                document.getElementById('projects-container').innerHTML = '<div class="loading-text">Ready for dynamic project integration.</div>';
+            }
+        }
+
+        loadProjects();
+    </script>
+
+</body>
+</html>
